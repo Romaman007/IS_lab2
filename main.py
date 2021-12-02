@@ -7,9 +7,8 @@ import numpy as np
 # константы генетического алгоритма
 POPULATION_SIZE = 100   # количество индивидуумов в популяции
 P_CROSSOVER = 0.9       # вероятность скрещивания
-P_MUTATION = 0.01        # вероятность мутации индивидуума
-MAX_GENERATIONS = 250    # максимальное количество поколений
-MAS = np.array([0,1,1,0,1,0,1,0,0,1,1,0,0,0,1])
+P_MUTATION = 0.05        # вероятность мутации индивидуума
+MAX_GENERATIONS = 25000    # максимальное количество поколений
 RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 
@@ -20,14 +19,17 @@ def ToBin(word):
         while n > 0:
             BinWord.insert(0,n % 2)
             n = n // 2
-        while(len(BinWord)%5!=0):
-            BinWord.insert(0,0);
+        while(len(BinWord)%7!=0):
+            BinWord.insert(0,0)
     return BinWord
 
 Word=input()
 charac=[]
 for c in Word:
-    charac.append(ord(c)-1071);
+    if(c!=" "):
+        charac.append(ord(c)-1038)
+    else:
+        charac.append(1)
 print(charac)
 MAS=ToBin(charac)
 print(MAS)
@@ -47,14 +49,17 @@ class Individual(list):
 
 def Indaclub(indamix):
     indaword=''
-    for i in range(len(indamix)//5):
+    for i in range(len(indamix)//7):
         z = 0
-        for j in range(5):
-            z+= indamix[i*5 + j]*2 ** (5 - 1 - j)
-        indaword+=chr(z+1071)
+        for j in range(7):
+            z+= indamix[i*7 + j]*2 ** (7 - 1 - j)
+        if(z!=1):
+            indaword+=chr(z+1038)
+        else:
+            indaword+=' '
     return indaword
 
-    return indaword
+
 def Fitness(individual):
     prodigy=0
     for i in range (len(MAS)):
